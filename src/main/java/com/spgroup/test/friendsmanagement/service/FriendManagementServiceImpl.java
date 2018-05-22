@@ -1,5 +1,6 @@
 package com.spgroup.test.friendsmanagement.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,25 +90,66 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 	@Override
 	public List<String> friendList(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> relationList = new ArrayList<>();
+		if(fmRepository.existsById(email)) {
+			relationList = relationshipRepository.getFriendList(email);
+		} else {
+			logger.warn("User not found");
+		}
+		return relationList;
 	}
 
 	@Override
 	public List<String> commonFriendList(List<String> emailList) {
-		// TODO Auto-generated method stub
-		return null;
+		if(emailList.get(0).equals(emailList.get(1))) {
+			logger.warn("Email address identical");
+		}
+		
+		List<String> commonList = new ArrayList<>();
+		
+		final Long friendsCount = emailList.stream()
+				.filter(email -> fmRepository.existsById(email))
+				.count();
+		
+		if(friendsCount == emailList.size()) {
+			commonList = relationshipRepository.getCommonFriendList(emailList);
+		} else {
+			logger.warn("email address not found");
+		}
+		return commonList;
 	}
 
 	@Override
 	public boolean subscribeToUpdates(String requestor, String target) {
-		// TODO Auto-generated method stub
-		return false;
+		if(requestor.equalsIgnoreCase(target)) {
+			logger.warn("Email address identical");
+		}
+		
+		if(fmRepository.existsById(requestor) && fmRepository.existsById(target)) {
+			RelationshipPK relPK = new RelationshipPK(requestor, target);
+			Relationship rel = new Relationship();
+			
+			if(relationshipRepository.existsById(relPK)) {
+				Optional<Relationship> relOpt = relationshipRepository.findById(relPK);
+				if(relOpt.isPresent()) {
+					rel = relOpt.get();
+					rel.setReceiveUpdates(true);
+				} else {
+					logger.warn("There is no Relationship between requestor {}, target {}", requestor, target);
+				}
+			} else {
+				rel = new Relationship(relPK, false, false, true);
+			}
+			relationshipRepository.save(rel);
+		} else {
+			logger.warn("Email address not found");
+		}
+		return true;
 	}
 
 	@Override
 	public boolean block(String requestor, String target) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method s
 		return false;
 	}
 
