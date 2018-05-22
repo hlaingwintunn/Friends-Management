@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spgroup.test.friendsmanagement.common.request.RequestFriendList;
 import com.spgroup.test.friendsmanagement.common.request.RequestFriends;
+import com.spgroup.test.friendsmanagement.common.request.RequestReceiveUpdates;
 import com.spgroup.test.friendsmanagement.common.request.RequestSubscribe;
 import com.spgroup.test.friendsmanagement.common.response.ResponseFriends;
 import com.spgroup.test.friendsmanagement.service.FriendManagementService;
@@ -57,7 +58,7 @@ public class ApiController {
 		return resp;
 		}
 	
-	@RequestMapping(value = "commonfriend", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/commonfriend", method = RequestMethod.POST, produces = "application/json")
 	public ResponseFriends commmonFriendList(@Valid @RequestBody RequestFriends req) {
 		List<String> commonList = fmService.commonFriendList(req.getEmails());
 		ResponseFriends resp = new ResponseFriends()
@@ -76,6 +77,24 @@ public class ApiController {
 	    		.setSuccess(subscribed);
 	    return resp;
 	  }
+	  
+	  @RequestMapping(value = "/block", method = RequestMethod.POST, produces = "application/json")
+	  public ResponseFriends block(@Valid @RequestBody RequestSubscribe req) {
+		boolean subscribed = fmService.block(req.getRequestor(), req.getTarget());
+		ResponseFriends resp = new ResponseFriends()
+				.setSuccess(subscribed);
+		  
+		return resp;
+		  
+	  }
 	
+	  @RequestMapping(value = "/receiveUpdates", method = RequestMethod.POST, produces = "application/json")
+	  public ResponseFriends receiveUpdatesList(@Valid @RequestBody RequestReceiveUpdates req) {
+		  List<String> friendsList = fmService.receiveUpdatesList(req.getSender());
+		  ResponseFriends resp = new ResponseFriends()
+				  .setSuccess(true)
+				  .setRecipients(friendsList);
+		return resp;
+		}
 
 }

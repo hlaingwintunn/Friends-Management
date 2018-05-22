@@ -149,14 +149,46 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 
 	@Override
 	public boolean block(String requestor, String target) {
-		// TODO Auto-generated method s
-		return false;
+		if(requestor.equals(target)) {
+			logger.warn("Email Address identical");
+		}
+		
+		if(fmRepository.existsById(requestor) && fmRepository.existsById(target)) {
+			RelationshipPK relPK = new RelationshipPK(requestor, target);
+			Relationship rel = new Relationship();
+			
+			if(relationshipRepository.existsById(relPK)) {
+				Optional<Relationship> relOpt = relationshipRepository.findById(relPK);
+				
+				if(relOpt.isPresent()) {
+					rel = relOpt.get();
+					rel.setReceiveUpdates(false);
+					if(!rel.isAreFriends()) {
+						rel.setBlocked(true);
+					}
+				}
+			} else {
+				rel = new Relationship(relPK, false, true, false);
+			}
+			
+			relationshipRepository.save(rel);
+		} else {
+			logger.warn("Email address not found");
+		}
+		
+		return true;
 	}
 
 	@Override
 	public List<String> receiveUpdatesList(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> updateList = new ArrayList<>();
+		
+		if(fmRepository.existsById(email)) {
+			updateList = relationshipRepository.getReceiveUpdatesList(email);
+		} else {
+			logger.warn("User not found");
+		}
+		return updateList;
 	}
 
 }
