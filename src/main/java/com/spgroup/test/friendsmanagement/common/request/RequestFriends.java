@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
 	"friends"
@@ -16,6 +18,7 @@ public class RequestFriends {
 	
 	@JsonProperty("friends")
 	@Size(min = 2, max= 2, message = "size must be 2")
+	@ApiModelProperty(notes = "Request friends email")
 	private List<String> emails;
 
 	public List<String> getEmails() {

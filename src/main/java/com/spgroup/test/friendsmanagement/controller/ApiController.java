@@ -15,6 +15,7 @@ import com.spgroup.test.friendsmanagement.common.request.RequestFriends;
 import com.spgroup.test.friendsmanagement.common.request.RequestReceiveUpdates;
 import com.spgroup.test.friendsmanagement.common.request.RequestSubscribe;
 import com.spgroup.test.friendsmanagement.common.response.ResponseFriends;
+import com.spgroup.test.friendsmanagement.service.FriendException;
 import com.spgroup.test.friendsmanagement.service.FriendManagementService;
 
 import io.swagger.annotations.Api;
@@ -38,7 +39,7 @@ public class ApiController {
 	}
 	
 	@RequestMapping(value = "/friends" , method = RequestMethod.POST, produces = "application/json")
-	public ResponseFriends friends(@Valid @RequestBody RequestFriends reqFriend) {
+	public ResponseFriends friends(@Valid @RequestBody RequestFriends reqFriend) throws FriendException {
 		
 		boolean success = fmService.friend(reqFriend.getEmails());
 		ResponseFriends resp = new ResponseFriends()
@@ -47,7 +48,7 @@ public class ApiController {
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json")
-	public ResponseFriends friendsList(@Valid @RequestBody RequestFriendList req) {
+	public ResponseFriends friendsList(@Valid @RequestBody RequestFriendList req) throws FriendException {
 		
 		List<String> friendList = fmService.friendList(req.getEmail());
 		ResponseFriends resp = new ResponseFriends()
@@ -59,7 +60,7 @@ public class ApiController {
 		}
 	
 	@RequestMapping(value = "/commonfriend", method = RequestMethod.POST, produces = "application/json")
-	public ResponseFriends commmonFriendList(@Valid @RequestBody RequestFriends req) {
+	public ResponseFriends commmonFriendList(@Valid @RequestBody RequestFriends req) throws FriendException {
 		List<String> commonList = fmService.commonFriendList(req.getEmails());
 		ResponseFriends resp = new ResponseFriends()
 				.setSuccess(true)
@@ -71,7 +72,7 @@ public class ApiController {
 	}
 	
 	  @RequestMapping(value ="/subscribe", method = RequestMethod.POST, produces = "application/json")
-	  public ResponseFriends subscribe(@Valid @RequestBody RequestSubscribe req) {
+	  public ResponseFriends subscribe(@Valid @RequestBody RequestSubscribe req) throws FriendException {
 	    boolean  subscribed = fmService.subscribeToUpdates(req.getRequestor(), req.getTarget());
 	    ResponseFriends resp = new ResponseFriends()
 	    		.setSuccess(subscribed);
@@ -79,7 +80,7 @@ public class ApiController {
 	  }
 	  
 	  @RequestMapping(value = "/block", method = RequestMethod.POST, produces = "application/json")
-	  public ResponseFriends block(@Valid @RequestBody RequestSubscribe req) {
+	  public ResponseFriends block(@Valid @RequestBody RequestSubscribe req) throws FriendException {
 		boolean subscribed = fmService.block(req.getRequestor(), req.getTarget());
 		ResponseFriends resp = new ResponseFriends()
 				.setSuccess(subscribed);
@@ -89,7 +90,7 @@ public class ApiController {
 	  }
 	
 	  @RequestMapping(value = "/receiveUpdates", method = RequestMethod.POST, produces = "application/json")
-	  public ResponseFriends receiveUpdatesList(@Valid @RequestBody RequestReceiveUpdates req) {
+	  public ResponseFriends receiveUpdatesList(@Valid @RequestBody RequestReceiveUpdates req) throws FriendException {
 		  List<String> friendsList = fmService.receiveUpdatesList(req.getSender());
 		  ResponseFriends resp = new ResponseFriends()
 				  .setSuccess(true)

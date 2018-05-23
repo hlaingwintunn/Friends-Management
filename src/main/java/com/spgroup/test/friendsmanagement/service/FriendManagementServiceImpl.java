@@ -31,10 +31,11 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 	}
 
 	@Override
-	public boolean friend(List<String> emailList) {
+	public boolean friend(List<String> emailList) throws FriendException {
 
 		if (emailList.get(0).equals(emailList.get(1))) {
 			logger.warn("Email address identical");
+			throw new FriendException("email.addresses.identical");
 		}
 
 		List<User> newUsers = emailList.stream().filter(email -> !fmRepository.existsById(email)).map(User::new)
@@ -89,20 +90,22 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 	}
 
 	@Override
-	public List<String> friendList(String email) {
+	public List<String> friendList(String email) throws FriendException {
 		List<String> relationList = new ArrayList<>();
 		if(fmRepository.existsById(email)) {
 			relationList = relationshipRepository.getFriendList(email);
 		} else {
 			logger.warn("User not found");
+			throw new FriendException("user.not.found");
 		}
 		return relationList;
 	}
 
 	@Override
-	public List<String> commonFriendList(List<String> emailList) {
+	public List<String> commonFriendList(List<String> emailList) throws FriendException {
 		if(emailList.get(0).equals(emailList.get(1))) {
 			logger.warn("Email address identical");
+			throw new FriendException("email.addresses.identical");
 		}
 		
 		List<String> commonList = new ArrayList<>();
@@ -115,14 +118,16 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 			commonList = relationshipRepository.getCommonFriendList(emailList);
 		} else {
 			logger.warn("email address not found");
+			throw new FriendException("email.addresses.not.found");
 		}
 		return commonList;
 	}
 
 	@Override
-	public boolean subscribeToUpdates(String requestor, String target) {
+	public boolean subscribeToUpdates(String requestor, String target) throws FriendException {
 		if(requestor.equalsIgnoreCase(target)) {
 			logger.warn("Email address identical");
+			throw new FriendException("email.addresses.identical");
 		}
 		
 		if(fmRepository.existsById(requestor) && fmRepository.existsById(target)) {
@@ -143,14 +148,16 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 			relationshipRepository.save(rel);
 		} else {
 			logger.warn("Email address not found");
+			throw new FriendException("email.addresses.not.found");
 		}
 		return true;
 	}
 
 	@Override
-	public boolean block(String requestor, String target) {
+	public boolean block(String requestor, String target) throws FriendException {
 		if(requestor.equals(target)) {
 			logger.warn("Email Address identical");
+			throw new FriendException("email.addresses.identical");
 		}
 		
 		if(fmRepository.existsById(requestor) && fmRepository.existsById(target)) {
@@ -174,19 +181,21 @@ public class FriendManagementServiceImpl implements FriendManagementService {
 			relationshipRepository.save(rel);
 		} else {
 			logger.warn("Email address not found");
+			throw new FriendException("email.addresses.not.found");
 		}
 		
 		return true;
 	}
 
 	@Override
-	public List<String> receiveUpdatesList(String email) {
+	public List<String> receiveUpdatesList(String email) throws FriendException {
 		List<String> updateList = new ArrayList<>();
 		
 		if(fmRepository.existsById(email)) {
 			updateList = relationshipRepository.getReceiveUpdatesList(email);
 		} else {
 			logger.warn("User not found");
+			throw new FriendException("user.not.found");
 		}
 		return updateList;
 	}
