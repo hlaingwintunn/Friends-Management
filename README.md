@@ -11,7 +11,7 @@ API server that does simple "Friend Management"
 
 
 #### REST API Documentation, Please go to below link;
-[demo](https://friend-management-restapi.herokuapp.com/swagger-ui.html#/)
+[Demo](https://friend-management-restapi.herokuapp.com/swagger-ui.html#/), Application Deployed on Heroku Cloud
 
 
 
