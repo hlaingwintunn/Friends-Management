@@ -1,5 +1,3 @@
-## Full Stack Engineer
-
 ### Background
 
 For any application with a need to build its own social network, "Friends Management" is a common requirement
@@ -197,16 +195,5 @@ You are allowed to use any frameworks for the language you chose.
 Please approach this exercise as you would in your day-to-day development workflow.
 
 If you write tests in your daily work, we would love to see them in this exercise too.
-
-#### Git and Commit History
-
-Sync your app to GitHub and allow access to `winston` and `miccheng`.
-
-Please maintain a descriptive and clear Git commit history as it would allow us to better understand your thought process.
-
-### Follow Up
-
-In the event that you are selected for the next round of interview (onsite chat),
-please be expected to discuss your work further with us during the interview.
 
 Looking forward to seeing your code!
