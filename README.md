@@ -1,7 +1,7 @@
 # Friends-Management
 API server that does simple "Friend Management"
 
-#### Pleae see [User Stories](https://github.com/hlaingwintunn/Friends-Management/blob/master/User_Stories.md)
+#### Please see [User Stories](https://github.com/hlaingwintunn/Friends-Management/blob/master/User_Stories.md)
 
 
 #### Prerequisite for this project:
@@ -34,7 +34,7 @@ Java 8
 Springboot
 Hibernate
 H2 inmemory Database
-TestNG (Testcase)
+Junit (Testcase)
 Heroku (Deployment)
 ```
 
