@@ -32,7 +32,8 @@ $ java -jar target/*.jar
 ```sh
 Java 8
 Springboot
-Hibernate
+Spring Data JPA
+Swagger RestApi Documentation
 H2 inmemory Database
 Junit (Testcase)
 Heroku (Deployment)
